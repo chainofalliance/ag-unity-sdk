@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AllianceGamesSdk.Client</name>
+    </assembly>
+    <members>
+        <member name="T:AllianceGamesSdk.Client.AllianceGamesClient">
+            <summary>
+            Represents a client instance in the Alliance Games network.
+            Handles network communication, message processing, and server interaction.
+            Provides methods for sending verified and unverified messages, making requests,
+            and registering handlers for incoming messages.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.AllianceGamesClient.PubKey">
+            <summary>
+            Gets the public key of this client instance.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.AllianceGamesClient.IsConnected">
+            <summary>
+            Gets whether the client is currently connected to the server.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.Create(AllianceGamesSdk.Common.Transport.ITransport,AllianceGamesSdk.Client.IClientConfig)">
+            <summary>
+            Creates a new instance of the AllianceGamesClient.
+            </summary>
+            <param name="transport">The transport layer implementation to use for network communication.</param>
+            <param name="config">Client configuration settings.</param>
+            <returns>A new AllianceGamesClient instance, or null if creation fails.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.Start(System.Threading.CancellationToken)">
+            <summary>
+            Starts the client and initializes all network connections.
+            </summary>
+            <param name="ct">Cancellation token to stop the client startup process.</param>
+            <returns>True if the client connected successfully, false otherwise.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.Send(System.UInt32,Chromia.Buffer,System.Threading.CancellationToken)">
+            <summary>
+            Sends a verified message to the server.
+            </summary>
+            <param name="header">Message type identifier.</param>
+            <param name="payload">Message content.</param>
+            <param name="ct">Cancellation token to cancel the send operation.</param>
+            <remarks>Verified messages are signed with the client's private key and verified by the network.</remarks>
+            <exception cref="T:System.InvalidOperationException">Thrown when the client is not connected.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.SendUnverified(System.UInt32,Chromia.Buffer,System.Threading.CancellationToken)">
+            <summary>
+            Sends an unverified message to the server.
+            </summary>
+            <param name="header">Message type identifier.</param>
+            <param name="payload">Message content.</param>
+            <param name="ct">Cancellation token to cancel the send operation.</param>
+            <remarks>Unverified messages are signed but do not get verified by the network.</remarks>
+            <exception cref="T:System.InvalidOperationException">Thrown when the client is not connected.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.Request(System.UInt32,Chromia.Buffer,System.Threading.CancellationToken,System.Int32)">
+            <summary>
+            Sends a verified request to the server and waits for a response.
+            </summary>
+            <param name="header">Request type identifier.</param>
+            <param name="payload">Request content.</param>
+            <param name="ct">Cancellation token to cancel the request.</param>
+            <param name="timeoutMs">Timeout in milliseconds for the request. Defaults to 5000.</param>
+            <returns>The response payload, or null if the request fails or times out.</returns>
+            <remarks>Verified requests are signed with the client's private key and verified by the network.</remarks>
+            <exception cref="T:System.InvalidOperationException">Thrown when the client is not connected.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.RequestUnverified(System.UInt32,Chromia.Buffer,System.Threading.CancellationToken,System.Int32)">
+            <summary>
+            Sends an unverified request to the server and waits for a response.
+            </summary>
+            <param name="header">Request type identifier.</param>
+            <param name="payload">Request content.</param>
+            <param name="ct">Cancellation token to cancel the request.</param>
+            <param name="timeoutMs">Timeout in milliseconds for the request. Defaults to 5000.</param>
+            <returns>The response payload, or null if the request fails or times out.</returns>
+            <remarks>Unverified requests are signed but do not get verified by the network.</remarks>
+            <exception cref="T:System.InvalidOperationException">Thrown when the client is not connected.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.RegisterMessageHandler(System.UInt32,System.Action{Chromia.Buffer})">
+            <summary>
+            Registers a handler for incoming messages of a specific type.
+            </summary>
+            <param name="header">Message type identifier to handle.</param>
+            <param name="handler">Callback function that processes the message payload.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.RegisterRequestHandler(System.UInt32,System.Func{Chromia.Buffer,Chromia.Buffer})">
+            <summary>
+            Registers a handler for incoming synchronous requests.
+            </summary>
+            <param name="header">Request type identifier to handle.</param>
+            <param name="handler">Callback function that processes the request and returns a response.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.RegisterRequestHandler(System.UInt32,System.Func{Chromia.Buffer,System.Threading.Tasks.Task{Chromia.Buffer}})">
+            <summary>
+            Registers a handler for incoming asynchronous requests.
+            </summary>
+            <param name="header">Request type identifier to handle.</param>
+            <param name="handler">Async callback function that processes the request and returns a response.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.AllianceGamesClient.Stop(System.Threading.CancellationToken)">
+            <summary>
+            Stops the client and closes all network connections.
+            </summary>
+            <param name="ct">Cancellation token to cancel the shutdown process.</param>
+            <returns>A task that completes when the client has fully stopped.</returns>
+        </member>
+        <member name="T:AllianceGamesSdk.Client.IClientConfig">
+            <summary>
+            Defines the configuration interface for Alliance Games client components.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Client.IClientConfig.DEFAULT_NODE_PORT">
+            <summary>
+            Default port number for node connections.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.IClientConfig.CoordinatorUri">
+            <summary>
+            Gets the URI of the coordinator node.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.IClientConfig.CoordinatorPubKey">
+            <summary>
+            Gets the public key of the coordinator node.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.IClientConfig.TaskRunner">
+            <summary>
+            Gets the task runner for managing asynchronous operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.IClientConfig.HttpClient">
+            <summary>
+            Gets the HTTP client for network communication.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Client.ClientConfig">
+            <summary>
+            Default implementation of IClientConfig.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.SessionId">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.CoordinatorUri">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.CoordinatorPubKey">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.PubKey">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.SignatureProvider">
+            <summary>
+            Gets the provider for cryptographic operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.TaskRunner">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.HttpClient">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.Logger">
+            <summary>
+            Gets the logger instance for this client.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.ResolveNodePort">
+            <summary>
+            Gets whether node port resolution is enabled.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.SessionParticipants">
+            <summary>
+            Gets the list of session participants' public keys.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.InitializationTimeoutMs">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.ConnectionTimeoutMs">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.ConnectionRetries">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.ConnectionRetryTimeoutMs">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.StatusProxyPath">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientConfig.SessionProxyPath">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Client.ClientConfig.#ctor(System.String,System.Uri,Chromia.Buffer,Chromia.SignatureProvider,AllianceGamesSdk.Common.ITaskRunner,AllianceGamesSdk.Common.Transport.IHttpClient,Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the ClientConfig class.
+            </summary>
+            <param name="sessionId">Unique identifier for the game session.</param>
+            <param name="coordinatorUri">URI of the coordinator node.</param>
+            <param name="coordinatorPubKey">Public key of the coordinator node.</param>
+            <param name="signatureProvider">Provider for cryptographic operations.</param>
+            <param name="taskRunner">Optional task runner. If null, a default implementation will be used.</param>
+            <param name="httpClient">Optional HTTP client. If null, a default implementation will be used.</param>
+            <param name="logger">Optional logger. If null, a default implementation will be used.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.ClientConfig.#ctor(System.String,System.String,Chromia.Buffer,Chromia.SignatureProvider,AllianceGamesSdk.Common.ITaskRunner,AllianceGamesSdk.Common.Transport.IHttpClient,Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the ClientConfig class using a string address.
+            </summary>
+            <param name="sessionId">Unique identifier for the game session.</param>
+            <param name="coordinatorAddress">String address of the coordinator node.</param>
+            <param name="coordinatorPubKey">Public key of the coordinator node.</param>
+            <param name="signatureProvider">Provider for cryptographic operations.</param>
+            <param name="taskRunner">Optional task runner. If null, a default implementation will be used.</param>
+            <param name="httpClient">Optional HTTP client. If null, a default implementation will be used.</param>
+            <param name="logger">Optional logger. If null, a default implementation will be used.</param>
+        </member>
+        <member name="T:AllianceGamesSdk.Client.ClientTestConfig">
+            <summary>
+            Test configuration implementation for Alliance Games client components.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.SessionId">
+            <summary>
+            Gets the unique identifier for the test session.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.SessionData">
+            <summary>
+            Gets the session data in JSON format.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.CoordinatorUri">
+            <summary>
+            Gets the URI of the coordinator node.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.CoordinatorPubKey">
+            <summary>
+            Gets the public key of the coordinator node.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.SignatureProvider">
+            <summary>
+            Gets the provider for cryptographic operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.PubKey">
+            <summary>
+            Gets the public key associated with this client's signature provider.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.SessionParticipants">
+            <summary>
+            Gets the list of session participants' public keys.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.TaskRunner">
+            <summary>
+            Gets the task runner for managing asynchronous operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.HttpClient">
+            <summary>
+            Gets the HTTP client for network communication.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.Logger">
+            <summary>
+            Gets the logger instance for this test client.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.ResolveNodePort">
+            <summary>
+            Gets whether node port resolution is enabled. Always false for test configuration.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.InitializationTimeoutMs">
+            <summary>
+            Gets the timeout duration for initialization operations in milliseconds.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.ConnectionTimeoutMs">
+            <summary>
+            Gets the timeout duration for connection attempts in milliseconds.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.ConnectionRetries">
+            <summary>
+            Gets the number of connection retry attempts.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.ConnectionRetryTimeoutMs">
+            <summary>
+            Gets the timeout duration between connection retry attempts in milliseconds.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.StatusProxyPath">
+            <summary>
+            Gets the path for status proxy operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.ClientTestConfig.SessionProxyPath">
+            <summary>
+            Gets the path for session proxy operations.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.ClientTestConfig.#ctor(System.String,System.String,System.Uri,Chromia.Buffer,Chromia.SignatureProvider,AllianceGamesSdk.Common.ITaskRunner,AllianceGamesSdk.Common.Transport.IHttpClient,Serilog.ILogger,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the ClientTestConfig class.
+            </summary>
+            <param name="sessionId">Unique identifier for the game session.</param>
+            <param name="sessionData">Session data in JSON format.</param>
+            <param name="coordinatorUri">URI of the coordinator node.</param>
+            <param name="coordinatorPubKey">Public key of the coordinator node.</param>
+            <param name="signatureProvider">Provider for cryptographic operations.</param>
+            <param name="taskRunner">Optional task runner. If null, a default implementation will be used.</param>
+            <param name="httpClient">Optional HTTP client. If null, a default implementation will be used.</param>
+            <param name="logger">Optional logger. If null, a default implementation will be used.</param>
+            <param name="initializationTimeoutMs">Timeout for initialization operations.</param>
+            <param name="connectionTimeoutMs">Timeout for connection attempts.</param>
+            <param name="connectionRetries">Number of connection retry attempts.</param>
+            <param name="connectionRetryTimeoutMs">Timeout between connection retry attempts.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.ClientTestConfig.#ctor(System.String,System.String,System.String,Chromia.Buffer,Chromia.SignatureProvider,AllianceGamesSdk.Common.ITaskRunner,AllianceGamesSdk.Common.Transport.IHttpClient,Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the ClientTestConfig class using a string address.
+            </summary>
+            <param name="sessionId">Unique identifier for the game session.</param>
+            <param name="sessionData">Session data in JSON format.</param>
+            <param name="coordinatorAddress">String address of the coordinator node.</param>
+            <param name="coordinatorPubKey">Public key of the coordinator node.</param>
+            <param name="signatureProvider">Provider for cryptographic operations.</param>
+            <param name="taskRunner">Optional task runner. If null, a default implementation will be used.</param>
+            <param name="httpClient">Optional HTTP client. If null, a default implementation will be used.</param>
+            <param name="logger">Optional logger. If null, a default implementation will be used.</param>
+        </member>
+        <member name="T:AllianceGamesSdk.Client.LocalTestClientConfig">
+            <summary>
+            Local test configuration for Alliance Games client components.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Client.LocalTestClientConfig.Identifier">
+            <summary>
+            Gets the identifier for the local test client.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.LocalTestClientConfig.#ctor(System.String,System.String,Chromia.Buffer,System.Uri,Chromia.Buffer,Chromia.SignatureProvider,AllianceGamesSdk.Common.ITaskRunner,AllianceGamesSdk.Common.Transport.IHttpClient,Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the LocalTestClientConfig class.
+            </summary>
+            <param name="sessionId">Unique identifier for the game session.</param>
+            <param name="sessionData">Session data in JSON format.</param>
+            <param name="identifier">Identifier for the local test client.</param>
+            <param name="coordinatorAddress">URI of the coordinator node.</param>
+            <param name="coordinatorPubKey">Public key of the coordinator node.</param>
+            <param name="signatureProvider">Provider for cryptographic operations.</param>
+            <param name="taskRunner">Optional task runner. If null, a default implementation will be used.</param>
+            <param name="httpClient">Optional HTTP client. If null, a default implementation will be used.</param>
+            <param name="logger">Optional logger. If null, a default implementation will be used.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Client.LocalTestClientConfig.#ctor(System.String,System.String,Chromia.Buffer,System.String,Chromia.Buffer,Chromia.SignatureProvider,AllianceGamesSdk.Common.ITaskRunner,AllianceGamesSdk.Common.Transport.IHttpClient,Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the LocalTestClientConfig class using a string address.
+            </summary>
+            <param name="sessionId">Unique identifier for the game session.</param>
+            <param name="sessionData">Session data in JSON format.</param>
+            <param name="identifier">Identifier for the local test client.</param>
+            <param name="coordinatorAddress">String address of the coordinator node.</param>
+            <param name="coordinatorPubKey">Public key of the coordinator node.</param>
+            <param name="signatureProvider">Provider for cryptographic operations.</param>
+            <param name="taskRunner">Optional task runner. If null, a default implementation will be used.</param>
+            <param name="httpClient">Optional HTTP client. If null, a default implementation will be used.</param>
+            <param name="logger">Optional logger. If null, a default implementation will be used.</param>
+        </member>
+    </members>
+</doc>

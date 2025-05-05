@@ -1,0 +1,12 @@
+{
+    "files.exclude": {
+        "**/*.meta": true,
+        "Logs": true,
+        "obj": true,
+        "Temp": true,
+        "UserSettings": true
+    },
+    "dotnet.preferCSharpExtension": true,
+    "dotnet.defaultSolution": "AllianceGamesSdk.sln",
+    "git.ignoreLimitWarning": true
+}

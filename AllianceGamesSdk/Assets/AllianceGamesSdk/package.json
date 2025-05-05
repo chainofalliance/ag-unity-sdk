@@ -1,0 +1,25 @@
+{
+    "name": "xyz.alliancegames.unity-sdk",
+    "version": "1.0.0",
+    "displayName": "Alliance Games SDK",
+    "description": "This package provides the Alliance Games SDK for Unity.",
+    "unity": "2020.3",
+    "documentationUrl": "https://alliance-games.gitbook.io/alliance-games-gitbook",
+    "dependencies": {},
+    "keywords": [
+        "AllianceGames",
+        "Infrastructure",
+        "Multiplayer",
+        "Chromia",
+        "Rell",
+        "Postchain"
+    ],
+    "dependencies": {
+        "com.unity.netcode.gameobjects": "1.12.2",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+    },
+    "author": {
+        "name": "Dennis Kirsch",
+        "email": "dennis.kirsch@chainofalliance.com"
+    }
+}

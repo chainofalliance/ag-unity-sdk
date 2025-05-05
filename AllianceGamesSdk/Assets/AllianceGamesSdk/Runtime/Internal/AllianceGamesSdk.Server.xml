@@ -1,0 +1,600 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AllianceGamesSdk.Server</name>
+    </assembly>
+    <members>
+        <member name="T:AllianceGamesSdk.Server.AllianceGamesServer">
+            <summary>
+            Represents a server instance in the Alliance Games network.
+            Handles network communication, message processing, and game state synchronization.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.PubKey">
+            <summary>
+            Gets the public key of this server instance.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.IsRunning">
+            <summary>
+            Gets whether the server is currently running.
+            </summary>
+        </member>
+        <member name="E:AllianceGamesSdk.Server.AllianceGamesServer.OnClientConnect">
+            <summary>
+            Event that is triggered when a client connects to the server.
+            Only triggers for clients that are in the authorized clients list.
+            </summary>
+            <remarks>
+            The event provides the public key of the connected client.
+            </remarks>
+        </member>
+        <member name="E:AllianceGamesSdk.Server.AllianceGamesServer.OnClientDisconnect">
+            <summary>
+            Event that is triggered when a client disconnects from the server.
+            Only triggers for clients that are in the authorized clients list.
+            </summary>
+            <remarks>
+            The event provides the public key of the disconnected client.
+            </remarks>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.SessionId">
+            <summary>
+            Gets the unique identifier for this game session.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.IsWitness">
+            <summary>
+            Gets whether this server instance is a witness node.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.SessionData``2">
+            <summary>
+            Gets the session data for the current game session.
+            </summary>
+            <typeparam name="TData">The type of the game session data.</typeparam>
+            <typeparam name="TPlayerData">The type of the player-specific data.</typeparam>
+            <returns>The session data instance.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown when the session data is not accessible.</exception>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.Logger">
+            <summary>
+            Gets the logger instance for the server.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.Clients">
+            <summary>
+            Gets the collection of authorized client identifier public keys.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServer.Random">
+            <summary>
+            Gets the random number generator that is synchronized across all nodes.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when the random generator is not accessible during health check.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Finalize">
+            <summary>
+            Finalizer that ensures proper cleanup of server resources.
+            </summary>
+            <remarks>
+            Logs a fatal error and attempts to cancel any pending operations if the server was not properly stopped.
+            To avoid this, always call Stop() before letting the server instance be garbage collected.
+            </remarks>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Create(AllianceGamesSdk.Common.Transport.ITransport,AllianceGamesSdk.Server.INodeConfig,AllianceGamesSdk.Common.Transport.IHttpClient)">
+            <summary>
+            Creates a new instance of the AllianceGamesServer.
+            </summary>
+            <param name="transport">The transport layer implementation to use for network communication.</param>
+            <param name="injectedConfig">Optional custom node configuration. If null, default configuration will be loaded.</param>
+            <param name="httpClient">Optional HTTP client implementation. If null, a default implementation will be used.</param>
+            <returns>A new AllianceGamesServer instance, or null if configuration could not be loaded.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Start(System.Threading.CancellationToken)">
+            <summary>
+            Starts the server and initializes all network connections.
+            </summary>
+            <param name="ct">Cancellation token to stop the server startup process.</param>
+            <returns>True if the server started successfully, false otherwise.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.UseProfiler(AllianceGamesSdk.Server.Profiler.ProfilerSystemResourceType[])">
+            <summary>
+            Enables profiling of specific system resources.
+            </summary>
+            <param name="profilerSystemResourceTypes">Array of system resource types to profile. If empty, all types will be profiled.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Send(System.UInt32,Chromia.Buffer,System.Threading.CancellationToken)">
+            <summary>
+            Sends a message to all connected clients.
+            </summary>
+            <param name="header">Message type identifier.</param>
+            <param name="payload">Message content.</param>
+            <param name="ct">Cancellation token to cancel the send operation.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Send(System.UInt32,Chromia.Buffer,Chromia.Buffer,System.Threading.CancellationToken)">
+            <summary>
+            Sends a message to a specific client.
+            </summary>
+            <param name="header">Message type identifier.</param>
+            <param name="target">Target client's public key.</param>
+            <param name="payload">Message content.</param>
+            <param name="ct">Cancellation token to cancel the send operation.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.RegisterMessageHandler(System.UInt32,System.Action{Chromia.Buffer,Chromia.Buffer})">
+            <summary>
+            Registers a handler for incoming messages of a specific type.
+            </summary>
+            <param name="header">Message type identifier to handle.</param>
+            <param name="handler">Callback function that processes the message. Takes sender's public key and message payload as parameters.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.RegisterRequestHandler(System.UInt32,System.Func{Chromia.Buffer,Chromia.Buffer,Chromia.Buffer})">
+            <summary>
+            Registers a handler for incoming synchronous requests.
+            </summary>
+            <param name="header">Request type identifier to handle.</param>
+            <param name="handler">Callback function that processes the request and returns a response. Takes sender's public key and request payload as parameters.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.RegisterRequestHandler(System.UInt32,System.Func{Chromia.Buffer,Chromia.Buffer,System.Threading.Tasks.Task{Chromia.Buffer}})">
+            <summary>
+            Registers a handler for incoming asynchronous requests.
+            </summary>
+            <param name="header">Request type identifier to handle.</param>
+            <param name="handler">Async callback function that processes the request and returns a response. Takes sender's public key and request payload as parameters.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Delay(System.UInt32,System.Threading.CancellationToken)">
+            <summary>
+            Creates a delay that is synchronized across all nodes in the network.
+            </summary>
+            <param name="milliseconds">Duration of the delay in milliseconds.</param>
+            <param name="ct">Optional cancellation token to cancel the delay.</param>
+            <returns>A task that completes when the delay expires.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.SetTimeout(System.Action,System.UInt32,System.Threading.CancellationToken)">
+            <summary>
+            Creates a timeout that is synchronized across all nodes in the network.
+            </summary>
+            <param name="callback">Action to execute when the timeout expires.</param>
+            <param name="milliseconds">Duration of the timeout in milliseconds.</param>
+            <param name="ct">Optional cancellation token to cancel the timeout.</param>
+            <returns>An ITimeout object that can be used to cancel the timeout.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Stop(System.String)">
+            <summary>
+            Stops the server and writes the final proof to disk.
+            </summary>
+            <param name="resultJson">Optional JSON string containing final game state or results.</param>
+            <returns>A task that completes when the server has fully stopped.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServer.Dispose">
+            <summary>
+            Releases all resources used by the server.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.AllianceGamesServerExtensions">
+            <summary>
+            Provides extension methods for task timeout handling using the AllianceGamesServer's synchronized timeout mechanism.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.AllianceGamesServerExtensions.ServerInstance">
+            <summary>
+            Gets or sets the current server instance used for synchronized timeout operations.
+            This property must be set before using any of the extension methods.
+            </summary>
+            <remarks>
+            This property is automatically set when creating a new AllianceGamesServer instance through the Create method.
+            </remarks>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServerExtensions.WithTimeout(System.Threading.Tasks.Task,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Adds a timeout to a task using the server's synchronized timeout mechanism.
+            </summary>
+            <param name="task">The task to add timeout to.</param>
+            <param name="timeout">The timeout duration as a TimeSpan.</param>
+            <param name="cancellationToken">Optional cancellation token to cancel the timeout.</param>
+            <returns>A task that completes when either the original task completes or the timeout expires.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when ServerInstance is not set.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServerExtensions.WithTimeout``1(System.Threading.Tasks.Task{``0},System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Adds a timeout to a task that returns a value using the server's synchronized timeout mechanism.
+            </summary>
+            <typeparam name="T">The type of the task result.</typeparam>
+            <param name="task">The task to add timeout to.</param>
+            <param name="timeout">The timeout duration as a TimeSpan.</param>
+            <param name="cancellationToken">Optional cancellation token to cancel the timeout.</param>
+            <returns>A task that completes with the original task's result or throws if the timeout expires.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when ServerInstance is not set.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServerExtensions.WithTimeout(System.Threading.Tasks.Task,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Adds a timeout to a task using the server's synchronized timeout mechanism.
+            </summary>
+            <param name="task">The task to add timeout to.</param>
+            <param name="timeout">The timeout duration in milliseconds.</param>
+            <param name="cancellationToken">Optional cancellation token to cancel the timeout.</param>
+            <returns>A task that completes when either the original task completes or the timeout expires.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when ServerInstance is not set.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.AllianceGamesServerExtensions.WithTimeout``1(System.Threading.Tasks.Task{``0},System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Adds a timeout to a task that returns a value using the server's synchronized timeout mechanism.
+            </summary>
+            <typeparam name="T">The type of the task result.</typeparam>
+            <param name="task">The task to add timeout to.</param>
+            <param name="timeout">The timeout duration in milliseconds.</param>
+            <param name="cancellationToken">Optional cancellation token to cancel the timeout.</param>
+            <returns>A task that completes with the original task's result or throws if the timeout expires.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when ServerInstance is not set.</exception>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.ITimeout">
+            <summary>
+            Represents a cancellable timeout operation that can be disposed.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.ITimeout.Cancel">
+            <summary>
+            Cancels the timeout operation.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.Node">
+            <summary>
+            Represents a network node with its public key and host information.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.Node.PubKey">
+            <summary>
+            Gets the node's public key.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.Node.Host">
+            <summary>
+            Gets the node's host address.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.Node.Uri">
+            <summary>
+            Gets the node's URI constructed from the host address.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.Node.#ctor(Chromia.Buffer,System.String)">
+            <summary>
+            Initializes a new instance of Node.
+            </summary>
+            <param name="pubKey">Node's public key.</param>
+            <param name="host">Node's host address.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.Node.Equals(System.Object)">
+            <summary>
+            Determines whether this node is equal to another object.
+            </summary>
+            <param name="obj">The object to compare with the current node.</param>
+            <returns>true if the specified object is equal to the current node; otherwise, false.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.Node.GetHashCode">
+            <summary>
+            Gets a hash code for the current node.
+            </summary>
+            <returns>A hash code value for this node.</returns>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.Client">
+            <summary>
+            Represents a client with an identifier and network signer.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.Client.Identifier">
+            <summary>
+            Gets the identifier for the client.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.Client.NetworkSigner">
+            <summary>
+            Gets the network signer for the client.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.Client.#ctor(Chromia.Buffer,Chromia.Buffer)">
+            <summary>
+            Initializes a new instance of the Client class.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.INodeConfig">
+            <summary>
+            Defines the configuration interface for Alliance Games server nodes.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Server.INodeConfig.DEFAULT_PORT">
+            <summary>
+            Default port for node communication.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Server.INodeConfig.HEALTH_PORT">
+            <summary>
+            Default port for health checks.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.Coordinator">
+            <summary>
+            Gets the coordinator node information.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.Clients">
+            <summary>
+            Gets the collection of authorized client public keys.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.Witnesses">
+            <summary>
+            Gets the collection of witness nodes.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.IsWitness">
+            <summary>
+            Gets whether this node is a witness.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.RandomSeed">
+            <summary>
+            Gets the random seed for this node.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.ListenIp">
+            <summary>
+            Gets the IP address to listen on.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.ListenPort">
+            <summary>
+            Gets the port to listen on.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.HealthPort">
+            <summary>
+            Gets the port for health checks.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.SessionPath">
+            <summary>
+            Gets the session file path.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.INodeConfig.SessionData``2">
+            <summary>
+            Gets the session data for the specified types.
+            </summary>
+            <typeparam name="TData">Type of the game session data.</typeparam>
+            <typeparam name="TPlayerData">Type of the player-specific data.</typeparam>
+            <returns>Structured session data.</returns>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.InHealthCheck">
+            <summary>
+            Gets whether the node is in health check mode.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.INodeConfig.HashVersion">
+            <summary>
+            Gets the hash version used by this node.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.NodeConfigBase">
+            <summary>
+            Base class for node configuration implementations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.Config">
+            <summary>
+            Gets the environment variable for the configuration.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ConfigExists">
+            <summary>
+            Gets whether a configuration exists in the environment.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.Logger">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.SessionId">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.PubKey">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.Coordinator">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.Clients">
+            <inheritdoc />
+        </member>
+        <member name="F:AllianceGamesSdk.Server.NodeConfigBase.clients">
+            <summary>
+            Gets the collection of authorized client public keys.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.Witnesses">
+            <inheritdoc />
+        </member>
+        <member name="F:AllianceGamesSdk.Server.NodeConfigBase.witnesses">
+            <summary>
+            Gets the collection of witness nodes.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.SignatureProvider">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.SessionParticipants">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ResolveNodePort">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ListenIp">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ListenPort">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.HealthPort">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.SessionPath">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.IsWitness">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.RandomSeed">
+            <inheritdoc />
+        </member>
+        <member name="F:AllianceGamesSdk.Server.NodeConfigBase.seed">
+            <summary>
+            Gets the random seed for this node.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.InHealthCheck">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.InitializationTimeoutMs">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ConnectionTimeoutMs">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ConnectionRetries">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.ConnectionRetryTimeoutMs">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.StatusProxyPath">
+            <inheritdoc />
+        </member>
+        <member name="P:AllianceGamesSdk.Server.NodeConfigBase.SessionProxyPath">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Server.NodeConfigBase.SessionData``2">
+            <summary>
+            Gets the session data parsed for the specified types.
+            </summary>
+            <typeparam name="TData">Type of the game session data.</typeparam>
+            <typeparam name="TPlayerData">Type of the player-specific data.</typeparam>
+            <returns>Structured session data.</returns>
+        </member>
+        <member name="F:AllianceGamesSdk.Server.NodeConfigBase.sessionDataString">
+            <summary>
+            Gets the session data string.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.NodeConfigBase.Load(AllianceGamesSdk.Server.INodeConfig,AllianceGamesSdk.Common.Transport.IHttpClient)">
+            <summary>
+            Loads a node configuration based on the provided parameters.
+            </summary>
+            <param name="injectedConfig">Optional pre-configured node configuration.</param>
+            <param name="httpClient">HTTP client for network communication.</param>
+            <returns>A node configuration instance or null if loading fails.</returns>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.InjectedNodeConfig">
+            <summary>
+            Represents an injected node configuration for testing and development purposes.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.InjectedNodeConfig.FileSystem">
+            <summary>
+            Gets the file system abstraction used by this configuration.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.InjectedNodeConfig.#ctor(System.String,System.String,AllianceGamesSdk.Server.Node,System.Collections.Generic.HashSet{AllianceGamesSdk.Server.Client},System.Collections.Generic.HashSet{AllianceGamesSdk.Server.Node},Chromia.ISignatureProvider,Serilog.ILogger,System.Nullable{System.Int32},System.String,System.Int32,System.Int32,System.Boolean,System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.IO.Abstractions.IFileSystem,System.Nullable{Chromia.Buffer})">
+            <summary>
+            Initializes a new instance of the InjectedNodeConfig class.
+            </summary>
+            <param name="sessionId">Unique identifier for the session.</param>
+            <param name="sessionData">Session data in JSON format.</param>
+            <param name="coordinator">Coordinator node information.</param>
+            <param name="clients">Set of authorized client public keys.</param>
+            <param name="witnesses">Set of witness nodes.</param>
+            <param name="sessionSignatureProvider">Provider for cryptographic operations.</param>
+            <param name="logger">Logger instance.</param>
+            <param name="randomSeed">Optional random seed for deterministic behavior.</param>
+            <param name="listenIp">IP address to listen on. Defaults to "localhost".</param>
+            <param name="listenPort">Port to listen on. Defaults to DEFAULT_PORT.</param>
+            <param name="healthPort">Port for health checks. Defaults to HEALTH_PORT.</param>
+            <param name="resolveNodePort">Whether to resolve node ports. Defaults to true.</param>
+            <param name="initializationTimeoutMs">Timeout for initialization in milliseconds.</param>
+            <param name="connectionTimeoutMs">Timeout for connection attempts.</param>
+            <param name="connectionRetries">Number of connection retry attempts.</param>
+            <param name="connectionRetryTimeoutMs">Timeout between connection retries.</param>
+            <param name="sessionPath">Optional path for session files.</param>
+            <param name="fileSystem">Optional file system abstraction.</param>
+            <param name="pubKey">Optional public key override.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.InjectedNodeConfig.Duplicate(Chromia.ISignatureProvider,System.Int32,System.Int32,Serilog.ILogger)">
+            <summary>
+            Creates a duplicate of this configuration with new signature provider, ports, and logger.
+            </summary>
+            <param name="sessionSignatureProvider">New signature provider to use.</param>
+            <param name="listenPort">New listen port to use.</param>
+            <param name="healthPort">New health check port to use.</param>
+            <param name="logger">New logger instance to use.</param>
+            <returns>A new InjectedNodeConfig instance with the specified parameters.</returns>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.LocalTestNodeConfig">
+            <summary>
+            Test configuration for local node testing.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Server.LocalTestNodeConfig.Timeout">
+            <summary>
+            Gets the timeout duration for test operations.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.LocalTestNodeConfig.#ctor(AllianceGamesSdk.Server.Node,Chromia.SignatureProvider,Serilog.ILogger,System.Int32)">
+            <summary>
+            Initializes a new instance of LocalTestNodeConfig.
+            </summary>
+            <param name="coordinator">Coordinator node information.</param>
+            <param name="sessionSignatureProvider">Provider for cryptographic operations.</param>
+            <param name="logger">Logger instance.</param>
+            <param name="timeout">Optional timeout duration in milliseconds. Defaults to 300000.</param>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.Profiler.ProfilerSystemResourceType">
+            <summary>
+            Enumerates the types of system resources that can be monitored and analyzed.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Server.Profiler.ProfilerSystemResourceType.Cpu">
+            <summary>
+            CPU resource type, monitoring processor usage, throttling events, and quota limits.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Server.Profiler.ProfilerSystemResourceType.Memory">
+            <summary>
+            Memory resource type, tracking allocation, usage patterns, and memory limits.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Server.Profiler.ProfilerSystemResourceType.Bandwidth">
+            <summary>
+            Network bandwidth resource type, analyzing data transfer rates, throttling, and connection quality.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Server.IRandom">
+            <inheritdoc cref="T:System.Random"/>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.IRandom.Next">
+            <inheritdoc cref="M:System.Random.Next"/>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.IRandom.Next(System.Int32,System.Int32)">
+            <inheritdoc cref="M:System.Random.Next(System.Int32,System.Int32)"/>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.IRandom.Next(System.Int32)">
+            <inheritdoc cref="M:System.Random.Next(System.Int32)"/>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.IRandom.NextBytes(System.Byte[])">
+            <inheritdoc cref="M:System.Random.NextBytes(System.Byte[])"/>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.IRandom.NextBytes(System.Span{System.Byte})">
+            <inheritdoc cref="M:System.Random.NextBytes(System.Span{System.Byte})"/>
+        </member>
+        <member name="M:AllianceGamesSdk.Server.IRandom.NextDouble">
+            <inheritdoc cref="M:System.Random.NextDouble"/>
+        </member>
+    </members>
+</doc>

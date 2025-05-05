@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AllianceGamesSdk.Common</name>
+    </assembly>
+    <members>
+        <member name="T:AllianceGamesSdk.Common.IConfig">
+            <summary>
+            Defines the configuration interface for Alliance Games SDK components.
+            Provides access to network settings, session information, and operational parameters.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.IConfig.DEFAULT_INITIALIZATION_TIMEOUT_MS">
+            <summary>
+            Default timeout in milliseconds for initialization operations.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.IConfig.DEFAULT_CONNECTION_TIMEOUT_MS">
+            <summary>
+            Default timeout in milliseconds for connection attempts.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.IConfig.DEFAULT_CONNECTION_RETRIES">
+            <summary>
+            Default number of connection retry attempts.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.IConfig.DEFAULT_CONNECTION_RETRY_TIMEOUT_MS">
+            <summary>
+            Default timeout in milliseconds between connection retry attempts.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.IConfig.DEFAULT_STATUS_PROXY_PATH">
+            <summary>
+            Default path for status proxy endpoint.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.IConfig.DEFAULT_SESSION_PROXY_PATH">
+            <summary>
+            Default path for session proxy endpoint.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.PubKey">
+            <summary>
+            Gets the public key of this instance.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.SessionParticipants">
+            <summary>
+            Gets the list of public keys for all participants in the current session.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.SessionId">
+            <summary>
+            Gets the unique identifier for the current session.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.ResolveNodePort">
+            <summary>
+            Gets whether node ports should be automatically resolved.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.SignatureProvider">
+            <summary>
+            Gets the signature provider for cryptographic operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.Logger">
+            <summary>
+            Gets the logger instance for recording events and diagnostics.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.InitializationTimeoutMs">
+            <summary>
+            Gets the timeout in milliseconds for initialization operations.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.ConnectionTimeoutMs">
+            <summary>
+            Gets the timeout in milliseconds for connection attempts.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.ConnectionRetries">
+            <summary>
+            Gets the number of connection retry attempts.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.ConnectionRetryTimeoutMs">
+            <summary>
+            Gets the timeout in milliseconds between connection retry attempts.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.StatusProxyPath">
+            <summary>
+            Gets the path for status proxy endpoint.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.IConfig.SessionProxyPath">
+            <summary>
+            Gets the path for session proxy endpoint.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.PreserveAttribute">
+            <summary>
+            Indicates that a type or member should be preserved during code stripping.
+            When using Unity, this type can be processed to generate the appropriate [Preserve] attributes.
+            </summary>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.SessionData`2">
+            <summary>
+            Represents structured session data with game and player-specific information.
+            </summary>
+            <typeparam name="TData">Type of the game session data.</typeparam>
+            <typeparam name="TPlayerData">Type of the player-specific data.</typeparam>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.SessionData`2.dataString">
+            <summary>
+            Gets the deserialized game data.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.SessionData`2.Data">
+            <summary>
+            Gets the deserialized game data.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.SessionData`2.Players">
+            <summary>
+            Gets the array of player-specific data.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.SessionData`2.#ctor(`0,AllianceGamesSdk.Common.SessionPlayerData{`1}[])">
+            <summary>
+            Initializes a new instance of SessionData.
+            </summary>
+            <param name="data">Game session data.</param>
+            <param name="players">Array of player data.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.SessionData`2.From(System.String)">
+            <summary>
+            Creates a SessionData instance from a JSON string.
+            </summary>
+            <param name="dataString">JSON string containing session data.</param>
+            <returns>Deserialized SessionData instance.</returns>
+            <exception cref="T:Newtonsoft.Json.JsonException">Thrown when deserialization fails.</exception>
+            <exception cref="T:System.Exception">Thrown when an unexpected error occurs during deserialization.</exception>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.SessionPlayerData`1">
+            <summary>
+            Represents player-specific data in a game session.
+            </summary>
+            <typeparam name="TData">Type of the player data.</typeparam>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.SessionPlayerData`1.pubKeyString">
+            <summary>
+            Gets the player's public key.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.SessionPlayerData`1.PubKey">
+            <summary>
+            Gets the player's public key.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.SessionPlayerData`1.dataString">
+            <summary>
+            Gets the deserialized player data.
+            </summary>
+        </member>
+        <member name="P:AllianceGamesSdk.Common.SessionPlayerData`1.Data">
+            <summary>
+            Gets the deserialized player data.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.SessionPlayerData`1.#ctor(Chromia.Buffer,`0)">
+            <summary>
+            Initializes a new instance of SessionPlayerData.
+            </summary>
+            <param name="pubKey">Player's public key.</param>
+            <param name="data">Player-specific data.</param>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.ITaskRunner">
+            <summary>
+            Defines an interface for managing asynchronous task execution and scheduling.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.ITaskRunner.Yield``1(System.Threading.Channels.ChannelReader{``0},System.Threading.CancellationToken)">
+            <summary>
+            Creates an async enumerable from a channel reader.
+            </summary>
+            <typeparam name="T">The type of items in the channel.</typeparam>
+            <param name="reader">The channel reader to read from.</param>
+            <param name="cancellationToken">Token to cancel the enumeration.</param>
+            <returns>An async enumerable that yields items from the channel.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.ITaskRunner.Delay(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Creates a task that completes after a specified time interval.
+            </summary>
+            <param name="delay">The time span to wait.</param>
+            <param name="cancellationToken">Token to cancel the delay.</param>
+            <returns>A task that completes after the specified delay.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.ITaskRunner.Delay(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Creates a task that completes after a specified number of milliseconds.
+            </summary>
+            <param name="milliseconds">The number of milliseconds to wait.</param>
+            <param name="cancellationToken">Token to cancel the delay.</param>
+            <returns>A task that completes after the specified delay.</returns>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.TaskRunner">
+            <summary>
+            Default implementation of ITaskRunner that uses Task.Delay and Channel operations.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.TaskRunner.Yield``1(System.Threading.Channels.ChannelReader{``0},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Common.TaskRunner.Delay(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:AllianceGamesSdk.Common.TaskExtension">
+            <summary>
+            Provides extension methods for Task operations.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.TaskExtension.AttachCancellationToken``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
+            <summary>
+            Attaches a cancellation token to an existing task.
+            </summary>
+            <typeparam name="T">The type of the task result.</typeparam>
+            <param name="originalTask">The task to attach the cancellation token to.</param>
+            <param name="cancellationToken">The cancellation token to attach.</param>
+            <returns>A task that completes with the original result or throws if cancelled.</returns>
+            <exception cref="T:System.OperationCanceledException">Thrown when the operation is canceled.</exception>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.Transport.IHttpClient">
+            <summary>
+            Defines the interface for HTTP communication capabilities.
+            Provides methods for making HTTP requests and handling incoming HTTP connections.
+            </summary>
+        </member>
+        <member name="E:AllianceGamesSdk.Common.Transport.IHttpClient.OnRequest">
+            <summary>
+            Event that is triggered when an HTTP request is received.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.IHttpClient.Start(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Starts listening for HTTP requests on the specified endpoint.
+            </summary>
+            <param name="ip">IP address to listen on.</param>
+            <param name="port">Port number to listen on.</param>
+            <param name="ct">Cancellation token to stop listening.</param>
+            <returns>True if the listener was started successfully, false otherwise.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.IHttpClient.Stop">
+            <summary>
+            Stops listening for HTTP requests.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.IHttpClient.Get(System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Performs an HTTP GET request to the specified URI.
+            </summary>
+            <param name="uri">The URI to send the GET request to.</param>
+            <param name="ct">Cancellation token to cancel the request.</param>
+            <returns>The response content as a string.</returns>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request fails or returns a non-success status code.</exception>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.Transport.HttpClient">
+            <summary>
+            Default implementation of IHttpClient using System.Net.Http.HttpClient for outgoing requests
+            and HttpListener for incoming requests.
+            </summary>
+        </member>
+        <member name="E:AllianceGamesSdk.Common.Transport.HttpClient.OnRequest">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.HttpClient.#ctor(Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the HttpClient class.
+            </summary>
+            <param name="logger">The logger to use for logging.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.HttpClient.Start(System.String,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.HttpClient.Stop">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.HttpClient.Get(System.Uri,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:AllianceGamesSdk.Common.Transport.ITransport">
+            <summary>
+            Defines the interface for network transport implementations.
+            Handles low-level network connections and message transmission.
+            </summary>
+        </member>
+        <member name="F:AllianceGamesSdk.Common.Transport.ITransport.MAX_MESSAGE_SIZE">
+            <summary>
+            Maximum size of a single message in bytes (1MB).
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.ITransport.Connect(System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Establishes a connection to a remote endpoint.
+            </summary>
+            <param name="uri">The URI of the remote endpoint to connect to.</param>
+            <param name="ct">Cancellation token to cancel the connection attempt.</param>
+            <returns>A transport connection if successful, null otherwise.</returns>
+            <exception cref="T:System.OperationCanceledException">Thrown when the operation is canceled.</exception>
+            <exception cref="T:System.UriFormatException">Thrown when the URI format is invalid.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.ITransport.Listen(System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Starts listening for incoming connections on the specified endpoint.
+            </summary>
+            <param name="ip">IP address to listen on.</param>
+            <param name="port">Port number to listen on.</param>
+            <param name="ct">Cancellation token to stop listening.</param>
+            <returns>An async enumerable of incoming transport connections.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when IP address or port is invalid.</exception>
+            <exception cref="T:System.OperationCanceledException">Thrown when the operation is canceled.</exception>
+        </member>
+        <member name="T:AllianceGamesSdk.Common.Transport.ITransportConnection">
+            <summary>
+            Represents a network connection established through a transport layer.
+            Provides methods for sending and receiving raw byte messages.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.ITransportConnection.Send(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Sends a raw byte message through the connection.
+            </summary>
+            <param name="message">The byte array containing the message to send.</param>
+            <param name="ct">Cancellation token to cancel the send operation.</param>
+            <returns>A task that completes when the message has been sent.</returns>
+            <exception cref="T:System.OperationCanceledException">Thrown when the operation is canceled.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the connection is closed or in an invalid state.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.ITransportConnection.Receive(System.Threading.CancellationToken)">
+            <summary>
+            Receives messages from the connection as an asynchronous stream.
+            </summary>
+            <param name="ct">Cancellation token to stop receiving messages.</param>
+            <returns>An async enumerable of received messages as byte arrays. Null indicates a connection close.</returns>
+            <exception cref="T:System.OperationCanceledException">Thrown when the operation is canceled.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the connection is closed or in an invalid state.</exception>
+        </member>
+        <member name="M:AllianceGamesSdk.Common.Transport.ITransportConnection.Disconnect(System.Threading.CancellationToken)">
+            <summary>
+            Gracefully closes the connection.
+            </summary>
+            <param name="ct">Cancellation token to cancel the disconnect operation.</param>
+            <returns>A task that completes when the connection has been closed.</returns>
+            <exception cref="T:System.OperationCanceledException">Thrown when the operation is canceled.</exception>
+        </member>
+    </members>
+</doc>

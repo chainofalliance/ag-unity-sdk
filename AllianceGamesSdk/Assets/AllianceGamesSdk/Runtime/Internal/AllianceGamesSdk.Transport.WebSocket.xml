@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AllianceGamesSdk.Transport.WebSocket</name>
+    </assembly>
+    <members>
+        <member name="T:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection">
+            <summary>
+            WebSocket implementation of a transport connection.
+            Provides message sending and receiving capabilities over a WebSocket connection.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.#ctor(System.Net.WebSockets.WebSocket,Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the WebSocket connection.
+            </summary>
+            <param name="webSocket">The underlying WebSocket instance.</param>
+            <param name="logger">Logger for connection-related events.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.Send(System.Byte[],System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.Receive(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.Disconnect(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.Disconnect(System.Net.WebSockets.WebSocketReceiveResult,System.Threading.CancellationToken)">
+            <summary>
+            Internal method to handle WebSocket disconnection with optional close frame details.
+            </summary>
+            <param name="result">Optional WebSocket receive result containing close frame details.</param>
+            <param name="ct">Cancellation token to cancel the disconnect operation.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.Equals(System.Object)">
+            <summary>
+            Determines whether the specified object is equal to the current WebSocket connection.
+            </summary>
+            <param name="obj">The object to compare with the current connection.</param>
+            <returns>true if the specified object is equal to the current connection; otherwise, false.</returns>
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketConnection.GetHashCode">
+            <summary>
+            Returns a hash code for the current WebSocket connection.
+            </summary>
+            <returns>A hash code for the current connection.</returns>
+        </member>
+        <member name="T:AllianceGamesSdk.Transport.WebSocket.WebSocketTransport">
+            <summary>
+            WebSocket implementation of the transport layer.
+            Provides WebSocket-based network communication capabilities.
+            </summary>
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketTransport.#ctor(Serilog.ILogger)">
+            <summary>
+            Initializes a new instance of the WebSocket transport.
+            </summary>
+            <param name="logger">Logger instance for transport-related events.</param>
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketTransport.Connect(System.Uri,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AllianceGamesSdk.Transport.WebSocket.WebSocketTransport.Listen(System.String,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
